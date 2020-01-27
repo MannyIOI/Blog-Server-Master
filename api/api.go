@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -46,7 +47,7 @@ func (server Server) createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // StartAPI comment
-func StartAPI(db models.DBHandler) {
+func StartAPI(db models.DBHandler, address string, port int) {
 	server := Server{Database: &db}
 	r := mux.NewRouter()
 	api := r.PathPrefix("").Subrouter()
@@ -54,6 +55,6 @@ func StartAPI(db models.DBHandler) {
 	api.HandleFunc("/user/{username}/", server.getUser).Methods("GET")
 	api.HandleFunc("/user/", server.createUser).Methods("POST")
 
-	fmt.Println("Listening on http://localhost:8080/")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	fmt.Println("Listening on ", address+":"+strconv.Itoa(port))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), r))
 }

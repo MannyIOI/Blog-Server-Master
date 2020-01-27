@@ -54,11 +54,7 @@ func (db_handler *DBHandler) GetDBInstance() *gorm.DB {
 
 // GetUser comment
 func (db_handler *DBHandler) GetUser(username string, reply *User) error {
-	var user User
-	db_handler.db.First(&user, "Username = ?", username)
-	if user.Username != "" {
-		*reply = user
-	}
+	db_handler.db.First(reply, "Username = ?", username)
 	return nil
 }
 
@@ -71,7 +67,6 @@ func (db_handler *DBHandler) GetAllBlogs(reply *[]Blog) error {
 // GetBlog Comment
 func (db_handler *DBHandler) GetBlog(identifier int, reply *Blog) error {
 	db_handler.db.First(reply, "blogIdentifier = ?", identifier)
-
 	return nil
 }
 

@@ -10,6 +10,8 @@ func main() {
 	db.Init()
 	db.Migrate()
 
-	api.StartAPI(db)
+	
+	go api.StartAPI(db, "http://10.4.107.133", 8080)
+	api.StartAPI(db, "http://10.4.107.133", 8081)
 
 }

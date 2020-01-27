@@ -4,10 +4,8 @@ package network
 
 // ServerNode comment
 type ServerNode struct {
-	Address    string
-	Port       string
-	Descriptor string
-	isLeader string
+	Address       string
+	Port          string
+	IsLeader      bool
+	MasterAddress string
 }
-
-
