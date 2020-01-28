@@ -19,9 +19,8 @@ type User struct {
 // Blog some comment
 type Blog struct {
 	gorm.Model
-	blogIdentifier int `gorm:"AUTO_INCREMENT"`
-	blogCreator    User
-	blogContent    string
+	BlogTitle   string
+	BlogContent string
 }
 
 // DBHandler comment
@@ -40,11 +39,9 @@ func (db_handler *DBHandler) Init() {
 
 // Migrate comment
 func (db_handler *DBHandler) Migrate() {
-
-	db_handler.db.Model(&User{}).AddUniqueIndex("idx_user_name", "Username")
-
 	db_handler.db.AutoMigrate(&User{})
-	db_handler.db.AutoMigrate(&Blog{})
+	// db_handler.db.AutoMigrate(&Blog{})
+	// db_handler.db.Model(&User{}).AddUniqueIndex("idx_user_name1", "Username")
 }
 
 // GetDBInstance comment

@@ -18,8 +18,6 @@ var SlaveList []ServerNode = []ServerNode{}
 type ServerMaster struct {
 	Address string
 	Port    string
-	// SlaveList []ServerNode
-	Database models.DBHandler
 }
 
 // ServerNode comment
@@ -74,10 +72,54 @@ func (server ServerMaster) NotifyNodesUser(user models.User, reply *models.User)
 	return nil
 }
 
+// NotifyNodesBlogCreate comment
+func (server ServerMaster) NotifyNodesBlogCreate(blog models.Blog, reply *models.Blog) error {
+	fmt.Println("NotifyNodesBlogCreate has been called remotely ", blog)
+	for index := 0; index < len(SlaveList); index++ {
+		// TODO notify all clients
+		serverNode := SlaveList[index]
+		var reply models.User
+		fmt.Println(serverNode.Address)
+		client, err := rpc.DialHTTP("tcp", serverNode.Address+":"+serverNode.Port)
+		if err != nil {
+			log.Fatal("error")
+		}
+		client.Call("DBHandler.CreateBlog", blog, &reply)
+		fmt.Println(reply)
+	}
+	return nil
+}
+
+// NotifyNodesBlogUpdate comment
+func (server ServerMaster) NotifyNodesBlogUpdate(blog models.Blog, reply *models.Blog) error {
+	fmt.Println("NotifyNodesBlogUpdate has been called remotely ", blog)
+	for index := 0; index < len(SlaveList); index++ {
+		// TODO notify all clients
+		serverNode := SlaveList[index]
+		var reply models.User
+		fmt.Println(serverNode.Address)
+		client, err := rpc.DialHTTP("tcp", serverNode.Address+":"+serverNode.Port)
+		if err != nil {
+			log.Fatal("error")
+		}
+		client.Call("DBHandler.UpdateBlogContent", blog, &reply)
+		fmt.Println(reply)
+	}
+	return nil
+}
+
 // AddNode comment
 func (server ServerMaster) AddNode(node ServerNode, reply *string) error {
-	SlaveList = append(SlaveList, node)
+	addNode := true
+	for index := 0; index < len(SlaveList); index++ {
+		if SlaveList[index] == node {
+			addNode = false
+		}
+	}
 
+	if addNode {
+		SlaveList = append(SlaveList, node)
+	}
 	fmt.Println(SlaveList)
 	return nil
 }
