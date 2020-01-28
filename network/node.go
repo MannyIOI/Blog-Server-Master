@@ -10,6 +10,8 @@ import (
 )
 
 // NODE ROLES MASTER AND SLAVE
+
+// SlaveList comment
 var SlaveList []ServerNode = []ServerNode{}
 
 // ServerMaster comment
@@ -27,9 +29,11 @@ type ServerNode struct {
 	MasterAddress string
 }
 
+// MessageObject comment
 type MessageObject struct {
 }
 
+// ListenToNodes comment
 func (server ServerMaster) ListenToNodes() {
 	serverMaster := new(ServerMaster)
 
@@ -51,7 +55,7 @@ func (server ServerMaster) ListenToNodes() {
 	http.Serve(listener, nil)
 }
 
-//
+// NotifyNodesUser comment
 func (server ServerMaster) NotifyNodesUser(user models.User, reply *models.User) error {
 	fmt.Println("NotifyNodesUser has been called remotely ", user)
 	fmt.Println(SlaveList)
