@@ -2,6 +2,7 @@ package api
 
 import (
 	"blogServer/models"
+	"blogServer/network"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,7 +14,8 @@ import (
 
 // Server comment
 type Server struct {
-	Database *models.DBHandler
+	Database   *models.DBHandler
+	ServerNode network.ServerMaster
 }
 
 func (server Server) getUser(w http.ResponseWriter, r *http.Request) {
@@ -36,13 +38,14 @@ func (server Server) getUser(w http.ResponseWriter, r *http.Request) {
 func (server Server) createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var user models.User
-
 	_ = json.NewDecoder(r.Body).Decode(&user)
-
 	var reply models.User
-	server.Database.CreateUser(user, &reply)
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&reply)
+	server.ServerNode.NotifyNodesUser(user, &reply)
+	// server.ServerNode.NotifyNodesUser(user)
+	//
+	// server.Database.CreateUser(user, &reply)
+	// w.WriteHeader(http.StatusOK)
+	// json.NewEncoder(w).Encode(&reply)
 
 }
 
